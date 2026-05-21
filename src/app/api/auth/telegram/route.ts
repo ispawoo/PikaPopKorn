@@ -97,7 +97,7 @@ export async function POST(request: Request) {
       last_name: user.last_name || user.lastName,
       avatar_url: user.photo_url || user.photoUrl,
       ...(isAdmin ? { is_admin: true } : {})
-    }).eq('id', authUser.id);
+    } as any).eq('id', authUser.id);
 
     // 5. Generate session for the user
     // We use generateLink to get a session without sending an actual email
