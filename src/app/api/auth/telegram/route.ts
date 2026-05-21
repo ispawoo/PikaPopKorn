@@ -91,13 +91,13 @@ export async function POST(request: Request) {
     const isAdmin = user.username === 'jalebibhai' || user.username === 'theispawoo';
 
     // Synchronize the public.users table explicitly
-    await supabaseAdmin.from('users').update({
+    await (supabaseAdmin.from('users') as any).update({
       username: user.username,
       first_name: user.first_name || user.firstName,
       last_name: user.last_name || user.lastName,
       avatar_url: user.photo_url || user.photoUrl,
       ...(isAdmin ? { is_admin: true } : {})
-    } as any).eq('id', authUser.id);
+    }).eq('id', authUser.id);
 
     // 5. Generate session for the user
     // We use generateLink to get a session without sending an actual email
