@@ -52,7 +52,8 @@ export function VideoPlayer({
     playbackSpeed,
     currentQuality,
     availableQualities,
-    setShowControls
+    setShowControls,
+    isFullscreen
   } = usePlayerStore();
 
   const [showQuality, setShowQuality] = useState(false);
@@ -73,6 +74,15 @@ export function VideoPlayer({
     if (hlsRef.current) {
       hlsRef.current.currentLevel = index;
     }
+    usePlayerStore.getState().setQuality(index);
+  };
+
+  // Handle subtitle change
+  const handleSubtitleChange = (index: number) => {
+    if (hlsRef.current) {
+      hlsRef.current.subtitleTrack = index;
+    }
+    usePlayerStore.getState().setSubtitle(index);
   };
 
   // Handle audio track change
@@ -97,7 +107,7 @@ export function VideoPlayer({
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center touch-none"
+      className={`${isFullscreen ? 'fixed inset-0 z-[100] w-[100vw] h-[100vh]' : 'relative w-full h-screen'} bg-black overflow-hidden flex items-center justify-center touch-none`}
       onMouseMove={() => setShowControls(true)}
       onClick={() => setShowControls(true)}
     >
@@ -132,7 +142,7 @@ export function VideoPlayer({
 
       {/* Modals */}
       <QualitySelector isOpen={showQuality} onClose={() => setShowQuality(false)} onSelect={handleQualityChange} />
-      <SubtitleSelector isOpen={showSubtitles} onClose={() => setShowSubtitles(false)} onSelect={() => {}} />
+      <SubtitleSelector isOpen={showSubtitles} onClose={() => setShowSubtitles(false)} onSelect={handleSubtitleChange} />
       <SpeedControl isOpen={showSpeed} onClose={() => setShowSpeed(false)} onSelect={(speed) => usePlayerStore.getState().setSpeed(speed)} />
       <AudioTrackSelector isOpen={showAudio} onClose={() => setShowAudio(false)} onSelect={handleAudioTrackChange} />
       

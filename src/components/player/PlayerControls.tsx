@@ -74,12 +74,21 @@ export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubt
 
   const toggleFullscreen = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => {
-        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-      });
+    if (isFullscreen) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => setFullscreen(false));
+      } else {
+        setFullscreen(false);
+      }
     } else {
-      document.exitFullscreen();
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+          setFullscreen(true);
+        });
+      } else {
+        setFullscreen(true);
+      }
     }
   };
 
