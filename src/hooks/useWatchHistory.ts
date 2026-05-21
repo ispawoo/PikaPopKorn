@@ -34,13 +34,13 @@ export function useWatchHistory() {
       const stored = localStorage.getItem('pika_history');
       let currentHistory: WatchHistoryItem[] = stored ? JSON.parse(stored) : [];
       
-      const existingIndex = currentHistory.findIndex(h => h.content_id === contentId && h.episode_id === (episodeId || null));
+      const existingIndex = currentHistory.findIndex(h => h.content_id === contentId && h.episode_id === (episodeId || undefined));
       
       const newItem: WatchHistoryItem = {
         id: existingIndex >= 0 ? currentHistory[existingIndex].id : `hist_${Date.now()}`,
         user_id: user?.id || 'guest',
         content_id: contentId,
-        episode_id: episodeId || null,
+        episode_id: episodeId || undefined,
         progress,
         duration,
         completed,
