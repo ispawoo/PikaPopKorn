@@ -1,3 +1,6 @@
+'use client';
+
+import { use, useState, useMemo } from 'react';
 import { notFound } from 'next/navigation';
 import { ContentCard } from '@/components/cards/ContentCard';
 import { CATEGORIES } from '@/utils/constants';
@@ -18,15 +21,30 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export default async function CategoryDetailPage({ params }: PageProps) {
-  const { slug } = await params;
+export default function CategoryDetailPage({ params }: PageProps) {
+  const { slug } = use(params);
+  const [sortBy, setSortBy] = useState('popular');
+  
   const category = CATEGORIES.find(c => c.slug === slug);
   
   if (!category) {
     notFound();
   }
 
-  const results = generateMockContent(20, category.name);
+  const results = useMemo(() => {
+    const data = generateMockContent(20, category.name);
+    
+    return data.sort((a, b) => {
+      if (sortBy === 'rating') {
+        return (b.rating || 0) - (a.rating || 0);
+      }
+      if (sortBy === 'latest') {
+        return (b.release_year || 0) - (a.release_year || 0);
+      }
+      // popular - just use ID sorting for mock consistency
+      return a.id.localeCompare(b.id);
+    });
+  }, [category.name, sortBy]);
 
   return (
     <div className="flex flex-col min-h-full pb-8">
@@ -40,7 +58,11 @@ export default async function CategoryDetailPage({ params }: PageProps) {
           Showing <span className="text-white font-medium">{results.length}</span> results
         </div>
         
-        <select className="bg-white/10 border border-white/20 text-white text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-yellow-400">
+        <select 
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="bg-white/10 border border-white/20 text-white text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-yellow-400"
+        >
           <option className="bg-zinc-900" value="popular">Popular</option>
           <option className="bg-zinc-900" value="latest">Latest</option>
           <option className="bg-zinc-900" value="rating">Top Rated</option>

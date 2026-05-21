@@ -18,8 +18,18 @@ const ADMIN_LINKS = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const { logout } = useAuth();
+  
+  const isLoginPage = pathname.startsWith('/admin/login');
+
+  if (isLoginPage) {
+    return (
+      <AuthGuard requireAdmin>
+        {children}
+      </AuthGuard>
+    );
+  }
 
   return (
     <AuthGuard requireAdmin>

@@ -19,7 +19,7 @@ export function AuthGuard({
   useEffect(() => {
     if (!isLoading && requireAdmin && !user?.is_admin) {
       if (!pathname.startsWith('/admin/login')) {
-        router.push('/');
+        router.push('/admin/login');
       }
     }
   }, [isAuthenticated, isLoading, user, router, requireAdmin, pathname]);
