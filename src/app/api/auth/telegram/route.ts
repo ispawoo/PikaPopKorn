@@ -88,7 +88,8 @@ export async function POST(request: Request) {
       });
     }
 
-    const isAdmin = user.username === 'jalebibhai' || user.username === 'theispawoo';
+    const adminUsernames = process.env.ADMIN_USERNAMES ? process.env.ADMIN_USERNAMES.split(',') : ['jalebibhai', 'theispawoo'];
+    const isAdmin = adminUsernames.includes(user.username);
 
     // Synchronize the public.users table explicitly
     await (supabaseAdmin.from('users') as any).update({

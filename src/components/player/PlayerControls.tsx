@@ -189,20 +189,20 @@ export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubt
               </div>
 
               <div className="flex items-center gap-1">
-                <button onClick={(e) => { e.stopPropagation(); onSpeedClick(); }} className="p-2 text-white hover:bg-white/10 rounded-full flex items-center gap-1">
-                  <Gauge className="w-5 h-5" />
+                <button onClick={(e) => { e.stopPropagation(); onSpeedClick(); }} className="p-3 md:p-2 text-white hover:bg-white/10 rounded-full flex items-center gap-1">
+                  <Gauge className="w-6 h-6 md:w-5 md:h-5" />
                   <span className="text-xs font-bold">{playbackSpeed}x</span>
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); onSubtitleClick(); }} className="p-2 text-white hover:bg-white/10 rounded-full">
-                  <Subtitles className="w-5 h-5" />
+                <button onClick={(e) => { e.stopPropagation(); onSubtitleClick(); }} className="p-3 md:p-2 text-white hover:bg-white/10 rounded-full">
+                  <Subtitles className="w-6 h-6 md:w-5 md:h-5" />
                 </button>
                 {document.pictureInPictureEnabled && (
-                  <button onClick={togglePiP} className="p-2 text-white hover:bg-white/10 rounded-full hidden md:block">
-                    <PictureInPicture className="w-5 h-5" />
+                  <button onClick={togglePiP} className="p-3 md:p-2 text-white hover:bg-white/10 rounded-full hidden md:block">
+                    <PictureInPicture className="w-6 h-6 md:w-5 md:h-5" />
                   </button>
                 )}
-                <button onClick={toggleFullscreen} className="p-2 text-white hover:bg-white/10 rounded-full">
-                  {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
+                <button onClick={toggleFullscreen} className="p-3 md:p-2 text-white hover:bg-white/10 rounded-full">
+                  {isFullscreen ? <Minimize className="w-6 h-6 md:w-5 md:h-5" /> : <Maximize className="w-6 h-6 md:w-5 md:h-5" />}
                 </button>
               </div>
             </div>
