@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, Info } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 type ToastType = 'success' | 'error' | 'info';
@@ -68,9 +68,11 @@ export function ToastContainer() {
 
 // Hook for easier access
 export function useToast() {
-  return useToastStore((state) => ({
-    success: (msg: string) => state.addToast(msg, 'success'),
-    error: (msg: string) => state.addToast(msg, 'error'),
-    info: (msg: string) => state.addToast(msg, 'info'),
-  }));
+  const addToast = useToastStore((state) => state.addToast);
+  
+  return useMemo(() => ({
+    success: (msg: string) => addToast(msg, 'success'),
+    error: (msg: string) => addToast(msg, 'error'),
+    info: (msg: string) => addToast(msg, 'info'),
+  }), [addToast]);
 }
