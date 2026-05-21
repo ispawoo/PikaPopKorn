@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import TelegramProvider from '@/lib/telegram/provider';
 import { UmamiScript } from '@/lib/umami/UmamiScript';
+import { ToastContainer } from '@/components/ui/Toast';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,6 +36,7 @@ export default function RootLayout({
       >
         <TelegramProvider>
           {children}
+          <ToastContainer />
         </TelegramProvider>
       </body>
     </html>

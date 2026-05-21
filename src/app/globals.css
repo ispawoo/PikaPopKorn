@@ -32,6 +32,19 @@
 }
 
 @layer utilities {
+  /* Safe area utilities for Telegram WebView / notched devices */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .pb-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
   .glass {
     @apply bg-white/5 backdrop-blur-xl border border-white/10;
   }

@@ -63,7 +63,7 @@ export default function SettingsPage() {
                 onClick={() => toggleSetting('autoplayNext')}
                 className={`w-12 h-6 rounded-full transition-colors relative ${settings.autoplayNext ? 'bg-yellow-400' : 'bg-zinc-700'}`}
               >
-                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${settings.autoplayNext ? 'translate-x-6.5 left-0.5' : 'translate-x-0.5'}`} />
+                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${settings.autoplayNext ? 'translate-x-[26px]' : 'translate-x-0.5'}`} />
               </button>
             </div>
             
@@ -76,7 +76,7 @@ export default function SettingsPage() {
                 onClick={() => toggleSetting('hdStreaming')}
                 className={`w-12 h-6 rounded-full transition-colors relative ${settings.hdStreaming ? 'bg-yellow-400' : 'bg-zinc-700'}`}
               >
-                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${settings.hdStreaming ? 'translate-x-6.5 left-0.5' : 'translate-x-0.5'}`} />
+                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${settings.hdStreaming ? 'translate-x-[26px]' : 'translate-x-0.5'}`} />
               </button>
             </div>
 

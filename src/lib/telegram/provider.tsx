@@ -1,25 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function TelegramProvider({ children }: { children: React.ReactNode }) {
-  const [isReady, setIsReady] = useState(false);
-
   useEffect(() => {
-    try {
-      import('@telegram-apps/sdk').then(({ init }) => {
-        init();
-        setIsReady(true);
-      }).catch(e => {
-        console.warn('Telegram SDK error', e);
-        setIsReady(true);
-      });
-    } catch (e) {
-      setIsReady(true);
-    }
+    // Initialize Telegram SDK in the background — does not block rendering
+    import('@telegram-apps/sdk').then(({ init }) => {
+      init();
+    }).catch(e => {
+      console.warn('Telegram SDK error', e);
+    });
   }, []);
 
-  if (!isReady) return null;
-
+  // Render children immediately — no loading gate to avoid blank-screen flash
   return <>{children}</>;
 }
