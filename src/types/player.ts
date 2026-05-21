@@ -11,6 +11,13 @@ export interface SubtitleTrack {
   url: string;
 }
 
+export interface AudioTrack {
+  id: number;
+  groupId: string;
+  language: string;
+  name: string;
+}
+
 export interface PlayerState {
   isPlaying: boolean;
   isPaused: boolean;
@@ -29,6 +36,8 @@ export interface PlayerState {
   isPiP: boolean;
   currentSubtitleIndex: number; // -1 for off
   availableSubtitles: SubtitleTrack[];
+  currentAudioTrack: number;
+  availableAudioTracks: AudioTrack[];
   showSkipIntro: boolean;
   showNextEpisode: boolean;
 }

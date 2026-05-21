@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 
 export function AuthGuard({
@@ -14,11 +14,15 @@ export function AuthGuard({
   const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
+  const pathname = usePathname() || '';
+
   useEffect(() => {
     if (!isLoading && requireAdmin && !user?.is_admin) {
-      router.push('/');
+      if (!pathname.startsWith('/admin/login')) {
+        router.push('/');
+      }
     }
-  }, [isAuthenticated, isLoading, user, router, requireAdmin]);
+  }, [isAuthenticated, isLoading, user, router, requireAdmin, pathname]);
 
   // For admin routes: block until auth is confirmed
   if (requireAdmin) {
@@ -31,6 +35,9 @@ export function AuthGuard({
     }
 
     if (!user?.is_admin) {
+      if (pathname.startsWith('/admin/login')) {
+        return <>{children}</>;
+      }
       return (
         <div className="flex h-screen w-full flex-col items-center justify-center bg-black p-4 text-center">
           <h1 className="mb-2 text-2xl font-bold text-white">Access Denied</h1>

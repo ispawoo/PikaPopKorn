@@ -35,8 +35,8 @@ export function HeroBanner({ banners }: HeroBannerProps) {
   if (!banners || banners.length === 0) return null;
 
   return (
-    <div className="relative w-full px-4 pt-4 mb-6">
-      <div className="relative rounded-2xl overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[2.5/1]">
+    <div className="relative w-full mb-6 mt-4">
+      <div className="relative w-full h-[400px] md:h-[500px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -57,13 +57,13 @@ export function HeroBanner({ banners }: HeroBannerProps) {
         </AnimatePresence>
 
         {banners.length > 1 && (
-          <div className="absolute bottom-3 md:bottom-6 right-4 md:right-8 flex gap-2 z-20">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
             {banners.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  idx === currentIndex ? 'w-6 bg-yellow-400' : 'w-2 bg-white/40 hover:bg-white/60'
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  idx === currentIndex ? 'w-6 bg-yellow-400' : 'w-2 bg-zinc-500 hover:bg-zinc-400'
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />

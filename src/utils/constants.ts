@@ -1,8 +1,5 @@
 export const APP_NAME = 'PikaPopKorn';
 export const APP_DESCRIPTION = 'Premium Telegram-native entertainment streaming platform';
-export const AUTHOR_NAME = 'Yasir Ispawoo';
-export const AUTHOR_GITHUB = 'https://github.com/ispawoo';
-export const BUY_ME_COFFEE = 'https://buymeacoffee.com/ispawoo';
 
 export const CATEGORIES = [
   { id: 'movies', name: 'Movies', slug: 'movies' },

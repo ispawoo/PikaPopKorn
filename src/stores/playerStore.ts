@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { PlayerState, QualityLevel, SubtitleTrack } from '@/types/player';
+import { PlayerState, QualityLevel, SubtitleTrack, AudioTrack } from '@/types/player';
 
 interface PlayerStore extends PlayerState {
   setPlaying: (isPlaying: boolean) => void;
@@ -17,6 +17,8 @@ interface PlayerStore extends PlayerState {
   setPiP: (isPiP: boolean) => void;
   setSubtitle: (index: number) => void;
   setAvailableSubtitles: (subtitles: SubtitleTrack[]) => void;
+  setAudioTrack: (index: number) => void;
+  setAvailableAudioTracks: (tracks: AudioTrack[]) => void;
   setShowControls: (show: boolean) => void;
   setShowSkipIntro: (show: boolean) => void;
   setShowNextEpisode: (show: boolean) => void;
@@ -40,6 +42,8 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
   isPiP: false,
   currentSubtitleIndex: -1,
   availableSubtitles: [],
+  currentAudioTrack: -1,
+  availableAudioTracks: [],
   showSkipIntro: false,
   showNextEpisode: false,
 
@@ -58,6 +62,8 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
   setPiP: (isPiP) => set({ isPiP }),
   setSubtitle: (currentSubtitleIndex) => set({ currentSubtitleIndex }),
   setAvailableSubtitles: (availableSubtitles) => set({ availableSubtitles }),
+  setAudioTrack: (currentAudioTrack) => set({ currentAudioTrack }),
+  setAvailableAudioTracks: (availableAudioTracks) => set({ availableAudioTracks }),
   setShowControls: (showControls) => set({ showControls }),
   setShowSkipIntro: (showSkipIntro) => set({ showSkipIntro }),
   setShowNextEpisode: (showNextEpisode) => set({ showNextEpisode }),

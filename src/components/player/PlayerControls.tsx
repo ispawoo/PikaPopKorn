@@ -13,10 +13,11 @@ interface PlayerControlsProps {
   onQualityClick: () => void;
   onSubtitleClick: () => void;
   onSpeedClick: () => void;
+  onSettingsClick?: () => void;
   onEpisodesClick?: () => void;
 }
 
-export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubtitleClick, onSpeedClick, onEpisodesClick }: PlayerControlsProps) {
+export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubtitleClick, onSpeedClick, onSettingsClick, onEpisodesClick }: PlayerControlsProps) {
   const { 
     isPlaying, 
     currentTime, 
@@ -30,7 +31,8 @@ export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubt
     setPiP,
     currentQuality,
     availableQualities,
-    playbackSpeed
+    playbackSpeed,
+    availableAudioTracks
   } = usePlayerStore();
 
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -116,9 +118,11 @@ export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubt
             </button>
             <h2 className="text-white font-bold text-lg max-w-[60%] truncate">{title}</h2>
             <div className="flex gap-2">
-              <button className="p-2 rounded-full text-white hover:bg-white/10">
-                <Settings className="w-6 h-6" />
-              </button>
+              {availableAudioTracks?.length > 1 && onSettingsClick && (
+                <button onClick={(e) => { e.stopPropagation(); onSettingsClick(); }} className="p-2 rounded-full text-white hover:bg-white/10">
+                  <Settings className="w-6 h-6" />
+                </button>
+              )}
             </div>
           </div>
 

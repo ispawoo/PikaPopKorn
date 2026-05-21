@@ -2,27 +2,25 @@
 
 import { CategoryCard } from '@/components/categories/CategoryCard';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const CATEGORIES = [
-  { name: 'Movies', slug: 'movies', colorClass: 'bg-blue-900/60', icon: '🎬', count: 1240 },
-  { name: 'Anime', slug: 'anime', colorClass: 'bg-red-900/60', icon: '🌸', count: 850 },
-  { name: 'Web Series', slug: 'web-series', colorClass: 'bg-emerald-900/60', icon: '📺', count: 420 },
-  { name: 'Short Dramas', slug: 'short-dramas', colorClass: 'bg-purple-900/60', icon: '🎭', count: 310 },
+  { name: 'Movies', slug: 'movies', imageUrl: 'https://picsum.photos/seed/movies/400/300', count: 1250 },
+  { name: 'Web Series', slug: 'web-series', imageUrl: 'https://picsum.photos/seed/webseries/400/300', count: 850 },
+  { name: 'Anime', slug: 'anime', imageUrl: 'https://picsum.photos/seed/anime/400/300', count: 950 },
+  { name: 'Short Dramas', slug: 'short-dramas', imageUrl: 'https://picsum.photos/seed/shortdramas/400/300', count: 620 },
 ];
 
 const GENRES = [
-  'Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 
-  'Documentary', 'Drama', 'Family', 'Fantasy', 'History', 
-  'Horror', 'Music', 'Mystery', 'Romance', 'Sci-Fi', 
-  'TV Movie', 'Thriller', 'War', 'Western'
+  'Action', 'Adventure', 'Drama', 'Thriller', 'Sci-Fi', 'Romance', 'Comedy', 'Fantasy', 'Crime', 'Mystery'
 ];
 
 export default function CategoriesPage() {
   return (
     <div className="px-4 py-6 pb-8">
-      <h1 className="text-3xl font-black font-outfit text-white mb-6">Categories</h1>
+      <h1 className="text-2xl font-black font-outfit text-white mb-6">Categories</h1>
       
-      <div className="grid grid-cols-2 gap-4 mb-10">
+      <div className="grid grid-cols-2 gap-3 md:gap-4 mb-8">
         {CATEGORIES.map((cat, idx) => (
           <motion.div
             key={cat.slug}
@@ -38,14 +36,17 @@ export default function CategoriesPage() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.4 }}
       >
-        <h2 className="text-xl font-bold font-outfit text-white mb-4">Browse by Genre</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold font-outfit text-white">Genres</h2>
+          <Link href="/genres" className="text-xs font-medium text-yellow-400">View All</Link>
+        </div>
         <div className="flex flex-wrap gap-2">
           {GENRES.map(genre => (
             <button
               key={genre}
-              className="px-4 py-2 bg-zinc-900 border border-white/5 rounded-full text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all"
+              className="px-4 py-1.5 bg-zinc-900 border border-white/5 rounded-md text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/10 transition-all"
             >
               {genre}
             </button>

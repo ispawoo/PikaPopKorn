@@ -9,8 +9,8 @@ const generateMockContent = (count: number, category: string) => {
     title: `${category} Title ${i + 1}`,
     slug: `mock-${category.toLowerCase()}-${i + 1}`,
     poster_url: `https://picsum.photos/seed/cat-${category}-${i}/400/600`,
-    rating: 7.0 + (Math.random() * 3),
-    release_year: 2020 + Math.floor(Math.random() * 5),
+    rating: 7.0 + (i * 0.5),
+    release_year: 2020 + (i % 5),
   }));
 };
 
@@ -47,7 +47,7 @@ export default async function CategoryDetailPage({ params }: PageProps) {
         </select>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-6 px-4 py-6">
+      <div className="flex flex-wrap gap-4 px-4 py-6 justify-center md:justify-start">
         {results.map((content) => (
           <ContentCard key={content.id} content={content} />
         ))}

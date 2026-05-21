@@ -9,6 +9,7 @@ import { PlayerControls } from './PlayerControls';
 import { QualitySelector } from './QualitySelector';
 import { SubtitleSelector } from './SubtitleSelector';
 import { SpeedControl } from './SpeedControl';
+import { AudioTrackSelector } from './AudioTrackSelector';
 import { SkipIntro } from './SkipIntro';
 import { EpisodeSelector } from './EpisodeSelector';
 import { Episode } from '@/types/content';
@@ -57,6 +58,7 @@ export function VideoPlayer({
   const [showQuality, setShowQuality] = useState(false);
   const [showSubtitles, setShowSubtitles] = useState(false);
   const [showSpeed, setShowSpeed] = useState(false);
+  const [showAudio, setShowAudio] = useState(false);
   const [showEpisodes, setShowEpisodes] = useState(false);
 
   // Apply playback speed
@@ -70,6 +72,13 @@ export function VideoPlayer({
   const handleQualityChange = (index: number) => {
     if (hlsRef.current) {
       hlsRef.current.currentLevel = index;
+    }
+  };
+
+  // Handle audio track change
+  const handleAudioTrackChange = (id: number) => {
+    if (hlsRef.current) {
+      hlsRef.current.audioTrack = id;
     }
   };
 
@@ -113,6 +122,7 @@ export function VideoPlayer({
             onQualityClick={() => setShowQuality(true)}
             onSubtitleClick={() => setShowSubtitles(true)}
             onSpeedClick={() => setShowSpeed(true)}
+            onSettingsClick={() => setShowAudio(true)}
             onEpisodesClick={episodes && episodes.length > 0 ? () => setShowEpisodes(true) : undefined}
           />
           
@@ -124,6 +134,7 @@ export function VideoPlayer({
       <QualitySelector isOpen={showQuality} onClose={() => setShowQuality(false)} onSelect={handleQualityChange} />
       <SubtitleSelector isOpen={showSubtitles} onClose={() => setShowSubtitles(false)} onSelect={() => {}} />
       <SpeedControl isOpen={showSpeed} onClose={() => setShowSpeed(false)} onSelect={(speed) => usePlayerStore.getState().setSpeed(speed)} />
+      <AudioTrackSelector isOpen={showAudio} onClose={() => setShowAudio(false)} onSelect={handleAudioTrackChange} />
       
       {episodes && onEpisodeSelect && (
         <EpisodeSelector 

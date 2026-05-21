@@ -14,7 +14,7 @@ interface SearchResultsProps {
 export function SearchResults({ query, results, isLoading }: SearchResultsProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 px-4 py-6">
+      <div className="flex flex-wrap gap-4 px-4 py-6 justify-center md:justify-start">
         {[...Array(10)].map((_, i) => (
           <SkeletonCard key={i} />
         ))}
@@ -37,7 +37,7 @@ export function SearchResults({ query, results, isLoading }: SearchResultsProps)
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-6 px-4 py-6">
+    <div className="flex flex-wrap gap-4 px-4 py-6 justify-center md:justify-start">
       {results.map((content, idx) => (
         <motion.div
           key={content.id}

@@ -18,7 +18,9 @@ export function useVideoPlayer(videoRef: React.RefObject<HTMLVideoElement | null
     setTime,
     setBuffered,
     setFullscreen,
-    setPiP
+    setPiP,
+    setAvailableAudioTracks,
+    setAudioTrack
   } = usePlayerStore();
 
   useEffect(() => {
@@ -28,10 +30,10 @@ export function useVideoPlayer(videoRef: React.RefObject<HTMLVideoElement | null
     const initPlayer = () => {
       if (Hls.isSupported()) {
         const hls = new Hls({
-          maxBufferLength: 30,
-          maxMaxBufferLength: 60,
-          enableWorker: true,
-          lowLatencyMode: true,
+          startLevel: -1, // Auto start level
+          capLevelToPlayerSize: true, // Don't download 4K if player is small
+          maxBufferLength: 30, // Keep buffer reasonable
+          // Removed lowLatencyMode and other aggressive settings that were slowing down standard streams
         });
 
         hlsRef.current = hls;
@@ -46,6 +48,18 @@ export function useVideoPlayer(videoRef: React.RefObject<HTMLVideoElement | null
             index,
           }));
           setAvailableQualities(qualities);
+          
+          if (hls.audioTracks) {
+            const audioTracks = hls.audioTracks.map((track, index) => ({
+              id: track.id,
+              groupId: track.groupId,
+              language: track.lang || 'unknown',
+              name: track.name || track.lang || `Track ${index + 1}`
+            }));
+            setAvailableAudioTracks(audioTracks);
+            setAudioTrack(hls.audioTrack);
+          }
+
           video.play().catch(e => console.warn('Auto-play prevented', e));
         });
 
@@ -115,7 +129,7 @@ export function useVideoPlayer(videoRef: React.RefObject<HTMLVideoElement | null
       video.removeEventListener('timeupdate', handleTimeUpdate);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
-  }, [streamUrl, videoRef, setAvailableQualities, setPlaying, setPaused, setBuffering, setTime, setBuffered, setFullscreen]);
+  }, [streamUrl, videoRef, setAvailableQualities, setAvailableAudioTracks, setAudioTrack, setPlaying, setPaused, setBuffering, setTime, setBuffered, setFullscreen]);
 
   return { hlsRef, isReady, error };
 }
