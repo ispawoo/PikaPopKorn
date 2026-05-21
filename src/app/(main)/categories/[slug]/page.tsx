@@ -41,9 +41,9 @@ export default async function CategoryDetailPage({ params }: PageProps) {
         </div>
         
         <select className="bg-white/10 border border-white/20 text-white text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-yellow-400">
-          <option value="popular">Popular</option>
-          <option value="latest">Latest</option>
-          <option value="rating">Top Rated</option>
+          <option className="bg-zinc-900" value="popular">Popular</option>
+          <option className="bg-zinc-900" value="latest">Latest</option>
+          <option className="bg-zinc-900" value="rating">Top Rated</option>
         </select>
       </div>
 

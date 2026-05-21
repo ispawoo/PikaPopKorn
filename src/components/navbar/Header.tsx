@@ -4,9 +4,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, Search } from 'lucide-react';
 import { Sidebar } from './Sidebar';
+import { useAuthStore } from '@/stores/authStore';
 
 export function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user } = useAuthStore();
+
+  const getInitial = () => {
+    if (user?.first_name) return user.first_name[0].toUpperCase();
+    if (user?.username) return user.username[0].toUpperCase();
+    return 'U';
+  };
 
   return (
     <>
@@ -31,7 +39,13 @@ export function Header() {
               <Search className="w-5 h-5 md:w-6 md:h-6" />
             </Link>
             <Link href="/profile" className="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden border border-yellow-400/30">
-              <img src="/avatar-placeholder.png" alt="User" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = 'https://ui-avatars.com/api/?name=User&background=3f3f46&color=FFD700'; }} />
+              {user?.avatar_url ? (
+                <img src={user.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
+                  <span className="text-xs text-yellow-400 font-bold">{getInitial()}</span>
+                </div>
+              )}
             </Link>
           </div>
         </div>
