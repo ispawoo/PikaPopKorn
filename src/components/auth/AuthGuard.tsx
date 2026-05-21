@@ -3,6 +3,7 @@
 import { ReactNode, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { Loader2 } from 'lucide-react';
 
 export function AuthGuard({
   children,
@@ -17,9 +18,10 @@ export function AuthGuard({
   const pathname = usePathname() || '';
 
   useEffect(() => {
-    if (!isLoading && requireAdmin && !user?.is_admin) {
-      if (!pathname.startsWith('/admin/login')) {
-        router.push('/admin/login');
+    const hasLocalToken = typeof window !== 'undefined' && localStorage.getItem('admin_auth_token') === 'true';
+    if (!isLoading && requireAdmin && !user?.is_admin && !hasLocalToken) {
+      if (!pathname.startsWith('/pikadmin')) {
+        router.push('/pikadmin');
       }
     }
   }, [isAuthenticated, isLoading, user, router, requireAdmin, pathname]);
@@ -28,14 +30,15 @@ export function AuthGuard({
   if (requireAdmin) {
     if (isLoading) {
       return (
-        <div className="flex h-screen w-full items-center justify-center bg-black">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-800 border-t-yellow-400" />
+        <div className="min-h-screen flex items-center justify-center bg-black">
+          <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
         </div>
       );
     }
 
-    if (!user?.is_admin) {
-      if (pathname.startsWith('/admin/login')) {
+    const hasLocalToken = typeof window !== 'undefined' && localStorage.getItem('admin_auth_token') === 'true';
+    if (!user?.is_admin && !hasLocalToken) {
+      if (pathname.startsWith('/pikadmin')) {
         return <>{children}</>;
       }
       return (
