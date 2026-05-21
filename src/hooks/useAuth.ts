@@ -87,8 +87,16 @@ export function useAuth() {
   }, []); // run once on mount — supabase is module-level, setUser/setLoading are stable Zustand refs
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    useAuthStore.getState().logout();
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      useAuthStore.getState().logout();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
+    }
   };
 
   return { user, isAuthenticated, isLoading, logout };

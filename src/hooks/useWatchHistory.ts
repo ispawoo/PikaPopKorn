@@ -1,11 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { createClient } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
 import { WatchHistoryItem } from '@/types/user';
-
-const supabase = createClient();
 
 export function useWatchHistory() {
   const [history, setHistory] = useState<WatchHistoryItem[]>([]);
@@ -13,69 +10,59 @@ export function useWatchHistory() {
   const { user } = useAuthStore();
 
   const fetchHistory = useCallback(async () => {
-    if (!user) return;
-    
     setIsLoading(true);
     try {
-      // In a real implementation, you'd join with content and episodes
-      const { data, error } = await supabase
-        .from('watch_history')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('last_watched_at', { ascending: false });
-
-      if (error) throw error;
-      setHistory(data as WatchHistoryItem[]);
+      const stored = localStorage.getItem('pika_history');
+      if (stored) {
+        setHistory(JSON.parse(stored));
+      }
     } catch (error) {
       console.error('Error fetching watch history:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     fetchHistory();
   }, [fetchHistory]);
 
   const saveProgress = async (contentId: string, episodeId: string | undefined, progress: number, duration: number) => {
-    if (!user) return;
-    
-    const completed = progress > duration * 0.9; // Consider completed if > 90%
+    const completed = progress > duration * 0.9;
     
     try {
-      const { error } = await supabase
-        .from('watch_history')
-        .upsert({
-          user_id: user.id,
-          content_id: contentId,
-          episode_id: episodeId || null,
-          progress,
-          duration,
-          completed,
-          last_watched_at: new Date().toISOString(),
-        } as any, {
-          onConflict: 'user_id, content_id, episode_id'
-        });
+      const stored = localStorage.getItem('pika_history');
+      let currentHistory: WatchHistoryItem[] = stored ? JSON.parse(stored) : [];
+      
+      const existingIndex = currentHistory.findIndex(h => h.content_id === contentId && h.episode_id === (episodeId || null));
+      
+      const newItem: WatchHistoryItem = {
+        id: existingIndex >= 0 ? currentHistory[existingIndex].id : `hist_${Date.now()}`,
+        user_id: user?.id || 'guest',
+        content_id: contentId,
+        episode_id: episodeId || null,
+        progress,
+        duration,
+        completed,
+        last_watched_at: new Date().toISOString(),
+      };
 
-      if (error) throw error;
+      if (existingIndex >= 0) {
+        currentHistory[existingIndex] = newItem;
+      } else {
+        currentHistory.unshift(newItem); // Add to beginning
+      }
+      
+      setHistory(currentHistory);
+      localStorage.setItem('pika_history', JSON.stringify(currentHistory));
     } catch (error) {
       console.error('Error saving progress:', error);
     }
   };
 
   const clearHistory = async () => {
-    if (!user) return;
-    try {
-      const { error } = await supabase
-        .from('watch_history')
-        .delete()
-        .eq('user_id', user.id);
-
-      if (error) throw error;
-      setHistory([]);
-    } catch (error) {
-      console.error('Error clearing history:', error);
-    }
+    setHistory([]);
+    localStorage.removeItem('pika_history');
   };
 
   return { history, isLoading, fetchHistory, saveProgress, clearHistory };
