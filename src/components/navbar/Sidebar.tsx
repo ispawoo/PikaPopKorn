@@ -56,7 +56,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               {!user?.is_premium && (
                 <SidebarLink href="/premium" icon={Crown} label="Go Premium" onClick={onClose} className="text-yellow-400" />
               )}
-              {!user?.is_admin && user?.username === 'theispawoo' && (
+              {!user?.is_admin && user?.username === 'jalebibhai' && (
                 <SidebarLink href="/admin/login" icon={Shield} label="Admin Login" onClick={onClose} className="text-red-400" />
               )}
               {user?.is_admin && (
