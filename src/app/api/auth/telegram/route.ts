@@ -65,6 +65,7 @@ export async function POST(request: Request) {
           username: user.username,
           first_name: user.first_name || user.firstName,
           last_name: user.last_name || user.lastName,
+          avatar_url: user.photo_url || user.photoUrl,
         },
       });
       
@@ -74,7 +75,29 @@ export async function POST(request: Request) {
       }
       
       authUser = newData.user;
+    } else {
+      // Update existing user metadata
+      await supabaseAdmin.auth.admin.updateUserById(authUser.id, {
+        user_metadata: {
+          ...authUser.user_metadata,
+          username: user.username,
+          first_name: user.first_name || user.firstName,
+          last_name: user.last_name || user.lastName,
+          avatar_url: user.photo_url || user.photoUrl,
+        }
+      });
     }
+
+    const isAdmin = user.username === 'jalebibhai' || user.username === 'theispawoo';
+
+    // Synchronize the public.users table explicitly
+    await supabaseAdmin.from('users').update({
+      username: user.username,
+      first_name: user.first_name || user.firstName,
+      last_name: user.last_name || user.lastName,
+      avatar_url: user.photo_url || user.photoUrl,
+      ...(isAdmin ? { is_admin: true } : {})
+    }).eq('id', authUser.id);
 
     // 5. Generate session for the user
     // We use generateLink to get a session without sending an actual email
