@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
 
 export async function POST(request: Request) {
   try {
@@ -8,7 +7,7 @@ export async function POST(request: Request) {
 
     if (username === 'admin' && password === 'admin123') {
       if (userId) {
-        const supabaseAdmin = createClient<Database>(
+        const supabaseAdmin = createClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!
         );
@@ -16,7 +15,7 @@ export async function POST(request: Request) {
         // Elevate the current user to admin
         await supabaseAdmin
           .from('users')
-          .update({ is_admin: true } as any)
+          .update({ is_admin: true })
           .eq('id', userId);
           
         return NextResponse.json({ success: true });
