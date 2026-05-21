@@ -20,10 +20,6 @@ export default function AdminLoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      setError('Please wait for Telegram Auth to initialize');
-      return;
-    }
 
     setIsLoading(true);
     setError('');
@@ -37,7 +33,12 @@ export default function AdminLoginPage() {
 
       if (res.ok) {
         // Update local state to reflect admin status
-        setUser({ ...user, is_admin: true });
+        setUser(user ? { ...user, is_admin: true } : { 
+          id: 'admin_mock_id', 
+          username: 'admin', 
+          first_name: 'Admin', 
+          is_admin: true 
+        } as any);
         router.push('/admin');
       } else {
         const data = await res.json();
