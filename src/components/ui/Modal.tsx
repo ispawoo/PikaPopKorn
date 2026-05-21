@@ -38,12 +38,6 @@ export function Modal({ isOpen, onClose, children, className }: ModalProps) {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              drag="y"
-              dragConstraints={{ top: 0, bottom: 0 }}
-              dragElastic={0.2}
-              onDragEnd={(_, info) => {
-                if (info.offset.y > 100) onClose();
-              }}
               className={cn(
                 "w-full sm:max-w-lg bg-zinc-900 border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 pointer-events-auto pb-safe",
                 className

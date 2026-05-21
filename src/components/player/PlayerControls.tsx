@@ -77,7 +77,11 @@ export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubt
     
     // Check for iOS native fullscreen first
     if (videoRef.current && (videoRef.current as any).webkitEnterFullscreen) {
-      (videoRef.current as any).webkitEnterFullscreen();
+      if ((videoRef.current as any).webkitDisplayingFullscreen) {
+        (videoRef.current as any).webkitExitFullscreen?.();
+      } else {
+        (videoRef.current as any).webkitEnterFullscreen();
+      }
       return;
     }
 

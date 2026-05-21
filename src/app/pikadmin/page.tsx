@@ -34,6 +34,8 @@ export default function AdminLoginPage() {
       if (res.ok) {
         // Set local persistent token so refresh doesn't kick them out
         localStorage.setItem('admin_auth_token', 'true');
+        // Also set a cookie for server-side middleware to detect (SameSite=None; Secure for Telegram iframe)
+        document.cookie = 'admin_auth_token=true; path=/; max-age=86400; SameSite=None; Secure';
         // Update local state to reflect admin status
         setUser(user ? { ...user, is_admin: true } : { 
           id: 'admin_mock_id', 
