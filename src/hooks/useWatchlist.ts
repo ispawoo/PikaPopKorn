@@ -4,11 +4,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
 
+const supabase = createClient();
+
 export function useWatchlist() {
   const [watchlistIds, setWatchlistIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuthStore();
-  const supabase = createClient();
 
   const fetchWatchlist = useCallback(async () => {
     if (!user) return;
@@ -27,7 +28,7 @@ export function useWatchlist() {
     } finally {
       setIsLoading(false);
     }
-  }, [user, supabase]);
+  }, [user]);
 
   useEffect(() => {
     fetchWatchlist();

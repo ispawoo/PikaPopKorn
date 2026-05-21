@@ -5,11 +5,12 @@ import { createClient } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
 import { WatchHistoryItem } from '@/types/user';
 
+const supabase = createClient();
+
 export function useWatchHistory() {
   const [history, setHistory] = useState<WatchHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuthStore();
-  const supabase = createClient();
 
   const fetchHistory = useCallback(async () => {
     if (!user) return;
@@ -30,7 +31,7 @@ export function useWatchHistory() {
     } finally {
       setIsLoading(false);
     }
-  }, [user, supabase]);
+  }, [user]);
 
   useEffect(() => {
     fetchHistory();
