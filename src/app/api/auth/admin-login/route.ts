@@ -7,6 +7,11 @@ export async function POST(request: Request) {
 
     if (username === 'admin' && password === 'admin123') {
       if (userId) {
+        // Bypass Supabase if keys are missing (development/mock mode)
+        if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          return NextResponse.json({ success: true, mocked: true });
+        }
+
         const supabaseAdmin = createClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -25,6 +30,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   } catch (error) {
+    console.error('Admin login error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
