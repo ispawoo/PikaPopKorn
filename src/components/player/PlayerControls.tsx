@@ -74,6 +74,13 @@ export function PlayerControls({ title, onBack, videoRef, onQualityClick, onSubt
 
   const toggleFullscreen = (e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    // Check for iOS native fullscreen first
+    if (videoRef.current && (videoRef.current as any).webkitEnterFullscreen) {
+      (videoRef.current as any).webkitEnterFullscreen();
+      return;
+    }
+
     if (isFullscreen) {
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => setFullscreen(false));
